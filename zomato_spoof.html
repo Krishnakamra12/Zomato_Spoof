@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Zomato – Discover Great Food</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav id="navbar">
+  <div class="nav-logo" onclick="goPage('home')">Zom<span>ato</span></div>
+  <div class="nav-location" onclick="showToast('📍 Vadodara, Gujarat')">
+    <span class="pin">📍</span> Vadodara
+  </div>
+  <div class="nav-links">
+    <a href="#" onclick="goPage('home')">Home</a>
+    <a href="#" onclick="goPage('restaurants')">Restaurants</a>
+    <a href="#" onclick="goPage('tracking')">Track Order</a>
+    <a href="#" onclick="goPage('profile')">Profile</a>
+    <button class="nav-cta" onclick="goPage('cart')">🛒 Cart <span id="nav-cart-count"></span></button>
+  </div>
+</nav>
+
+<div id="page-home" class="page active">
+  <section class="hero">
+    <div class="hero-badge">🔥 Over 50,000 restaurants near you</div>
+    <h1>Hungry? <em>We've got you.</em></h1>
+    <p>Order food from the best restaurants in your city. Fast delivery, great deals.</p>
+    <div class="hero-search">
+      <input type="text" placeholder="Search for restaurants, cuisines..." id="hero-input"/>
+      <button onclick="doSearch()">Search →</button>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><strong>50K+</strong><span>Restaurants</span></div>
+      <div class="hero-stat"><strong>2M+</strong><span>Happy Orders</span></div>
+      <div class="hero-stat"><strong>30 min</strong><span>Avg. Delivery</span></div>
+    </div>
+  </section>
+
+  <div class="offers-strip">
+    <div class="offer-chip"><strong>100% OFF</strong><span>Up to ₹100 off</span></div>
+    <div class="offer-chip"><strong>Free Delivery</strong><span>On orders above ₹299</span></div>
+    <div class="offer-chip"><strong>ZOMPROF50</strong><span>New user? Use this!</span></div>
+    <div class="offer-chip"><strong>Buy 1 Get 1</strong><span>On select items</span></div>
+    <div class="offer-chip"><strong>Flash Sale ⚡</strong><span>Tonight 8–10 PM</span></div>
+  </div>
+
+  <section class="section">
+    <div class="section-title">What are you craving?</div>
+    <div class="section-sub">Pick a category to get started</div>
+    <div class="cats-grid" id="cats-grid"></div>
+  </section>
+
+  <section class="section" style="background: #fff3f3; border-radius: 24px; margin: 0 20px;">
+    <div class="section-title">Popular near you</div>
+    <div class="section-sub">Fast delivery · Highly rated</div>
+    <div class="rest-grid" id="popular-grid"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-title">New on Zomato 🆕</div>
+    <div class="section-sub">Try something different today</div>
+    <div class="rest-grid" id="new-grid"></div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="nav-logo" style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:#fff;">Zomato</span>
+        <p>Delivering happiness to your doorstep every single day. Order food, explore restaurants, and enjoy great meals.</p>
+      </div>
+      <div class="footer-col">
+        <h4>For Foodies</h4>
+        <a href="#">Zomato Pro</a>
+        <a href="#">Notifications</a>
+        <a href="#">Refer & Earn</a>
+        <a href="#">Zomato Credits</a>
+      </div>
+      <div class="footer-col">
+        <h4>For Restaurants</h4>
+        <a href="#">Partner with us</a>
+        <a href="#">Advertise</a>
+        <a href="#">Login</a>
+      </div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 Zomato Technologies Pvt. Ltd. — A fictional spoof for demo purposes only.</p>
+    <p>Made with ❤️ by Krishna Kamra. All data and content are purely fictional and for demonstration purposes only.</p></div>
+  </footer>
+</div>
+
+<div id="page-restaurants" class="page">
+  <section class="section">
+    <div class="section-title">All Restaurants</div>
+    <div class="section-sub">Browse & order from the best near Vadodara</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;" id="filter-chips"></div>
+    <div class="rest-grid" id="all-rest-grid"></div>
+  </section>
+</div>
+
+<div id="page-detail" class="page">
+  <div class="rest-hero" id="detail-hero-bg">
+    <span id="detail-hero-emoji" style="position:relative;z-index:1;font-size:5rem;"></span>
+    <div class="rest-hero-overlay"></div>
+    <div class="rest-hero-info">
+      <h2 id="detail-name"></h2>
+      <div id="detail-meta" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:0.85rem;"></div>
+    </div>
+  </div>
+  <div class="rest-detail-body">
+    <div class="detail-tabs">
+      <div class="detail-tab active" onclick="switchTab('menu')">Menu</div>
+      <div class="detail-tab" onclick="switchTab('photos')">Photos</div>
+      <div class="detail-tab" onclick="switchTab('reviews')">Reviews</div>
+      <div class="detail-tab" onclick="switchTab('info')">Info</div>
+    </div>
+    <div id="tab-menu" class="tab-content active">
+      <div id="menu-container"></div>
+    </div>
+    <div id="tab-photos" class="tab-content">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;" id="photos-grid"></div>
+    </div>
+    <div id="tab-reviews" class="tab-content">
+      <div id="reviews-container" style="display:flex;flex-direction:column;gap:14px;"></div>
+    </div>
+    <div id="tab-info" class="tab-content">
+      <div id="info-container"></div>
+    </div>
+  </div>
+</div>
+
+<div id="page-cart" class="page">
+  <div class="cart-container">
+    <div class="cart-title">🛒 Your Cart</div>
+    <div id="cart-content"></div>
+  </div>
+</div>
+
+<div id="page-tracking" class="page">
+  <div class="tracking-container">
+    <div id="tracking-no-order" style="text-align:center;padding:60px 20px;display:none;">
+      <div style="font-size:4rem;margin-bottom:16px;">📦</div>
+      <h3 style="font-family:'Syne',sans-serif;font-size:1.3rem;margin-bottom:8px;">No active orders</h3>
+      <p style="color:var(--muted);margin-bottom:20px;">Place an order to track it here.</p>
+      <button class="nav-cta" onclick="goPage('restaurants')">Order Now</button>
+    </div>
+    <div id="tracking-card"></div>
+  </div>
+</div>
+
+<div id="page-profile" class="page">
+  <div class="profile-container">
+    <div class="profile-header">
+      <div class="avatar">K</div>
+      <div>
+        <div class="profile-name">Krishna Kamra</div>
+        <div class="profile-sub">krishna.kamra@gmail.com · Vadodara</div>
+      </div>
+    </div>
+    <div class="profile-sections">
+      <div class="profile-row" onclick="showToast('Opening past orders...')"><span class="profile-row-icon">📋</span><span class="profile-row-label">Past Orders</span><span class="profile-row-arrow">›</span></div>
+      <div class="profile-row" onclick="showToast('Opening addresses...')"><span class="profile-row-icon">🏠</span><span class="profile-row-label">Saved Addresses</span><span class="profile-row-arrow">›</span></div>
+      <div class="profile-row" onclick="showToast('Zomato Pro — Upgrade coming soon!')"><span class="profile-row-icon">⭐</span><span class="profile-row-label">Zomato Pro Membership</span><span class="profile-row-arrow">›</span></div>
+      <div class="profile-row" onclick="showToast('Payments page...')"><span class="profile-row-icon">💳</span><span class="profile-row-label">Payment Methods</span><span class="profile-row-arrow">›</span></div>
+      <div class="profile-row" onclick="showToast('Settings page...')"><span class="profile-row-icon">⚙️</span><span class="profile-row-label">Settings</span><span class="profile-row-arrow">›</span></div>
+      <div class="profile-row" onclick="showToast('Refer & Earn coming soon!')"><span class="profile-row-icon">🎁</span><span class="profile-row-label">Refer & Earn</span><span class="profile-row-arrow">›</span></div>
+      <div class="profile-row" onclick="showToast('Logged out! (Just kidding 😄)')"><span class="profile-row-icon">🚪</span><span class="profile-row-label">Log Out</span><span class="profile-row-arrow">›</span></div>
+    </div>
+  </div>
+</div>
+
+<nav class="bottom-nav">
+  <div class="bnav-item active" id="bnav-home" onclick="goPage('home')"><span class="icon">🏠</span>Home</div>
+  <div class="bnav-item" id="bnav-restaurants" onclick="goPage('restaurants')"><span class="icon">🍽️</span>Explore</div>
+  <div class="bnav-item" id="bnav-cart" onclick="goPage('cart')">
+    <div class="bnav-icon-wrap"><span class="icon">🛒</span><span class="cart-badge" id="cart-badge" style="display:none">0</span></div>Cart
+  </div>
+  <div class="bnav-item" id="bnav-tracking" onclick="goPage('tracking')"><span class="icon">📍</span>Track</div>
+  <div class="bnav-item" id="bnav-profile" onclick="goPage('profile')"><span class="icon">👤</span>Profile</div>
+</nav>
+
+<div class="modal-overlay" id="order-modal">
+  <div class="modal">
+    <h3>🎉 Order Placed!</h3>
+    <p>Your order has been placed successfully. Our rider will pick it up soon. Estimated delivery: <strong>28–35 minutes</strong>.</p>
+    <button class="modal-btn" onclick="closeModalAndTrack()">Track Order</button>
+    <button class="modal-btn outline" onclick="document.getElementById('order-modal').classList.remove('open')">Continue Browsing</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="script.js"></script>
+</body>
+</html>
